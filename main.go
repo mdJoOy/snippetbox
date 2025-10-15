@@ -22,6 +22,14 @@ func snippetCreate(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not Allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
+	//manupulating header map
+	w.Header().Set("Cache-Control", "Public, max-age: 34555")
+	w.Header().Del("Cache-Control")
+	log.Print(w.Header().Get("Content-Type"))
+	log.Print(w.Header().Values("Content-Type"))
+	// suppresing system generated headers
+	w.Header()["Date"] = nil
 	w.Write([]byte("Create a snippet..."))
 }
 func main() {
