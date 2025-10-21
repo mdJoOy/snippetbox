@@ -18,15 +18,8 @@ func main() {
 	//file server
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
-	//logging and saving log in file
-	f, err := os.OpenFile("/tmp/info.log", os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
 	//custom log info
-	infoLog := log.New(f, "INFO\t", log.Ldate|log.Ltime)
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	//custom log error
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Llongfile)
 
@@ -42,6 +35,6 @@ func main() {
 		Handler:  mux,
 	}
 	infoLog.Printf("Starting server on :%s", *addr)
-	err = srv.ListenAndServe()
+	err := srv.ListenAndServe()
 	errorLog.Fatal(err)
 }
